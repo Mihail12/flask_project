@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PDF</title>
+</head>
+<body>
+	<div class="watermark">
+  <p class="watermark-text">Службова інформація - логін прізвище імя дата_друку</p>
+  <p class="watermark-text">Службова інформація - логін прізвище імя дата_друку</p>
+  <p class="watermark-text">Службова інформація - логін прізвище імя дата_друку</p>
+  <p class="watermark-text">Службова інформація - логін прізвище імя дата_друку</p>
+
+	</div>
+	<div class="content">
+        <div style="margin-left: 60%">
+            <p>Довідник створенно:</p>
+            <p>ПIБ: {{ user['last_name'] }} {{ user['first_name'] }} {{ user['middle_name'] }}</p>
+            <p>Департамент: {{ user_dep_name }}</p>
+        </div>
+        <div style="margin-top: 10%;">
+            <p>№ {{ ref_num }}</p>
+        </div>
+        <div style="text-align: center; margin-top: 10%;">
+            <p>Довідка про стан документу</p>
+        </div>
+        <div style="margin-top: 5%;">
+            <p>Тип документу: {{ doc_lost.doc_type.name }}</p>
+            <p>Серія, номер: {{ doc_lost.series }}{{ doc_lost.number }}</p>
+            <p>ПІБ: {{ doc_lost.last_name }} {{ doc_lost.first_name }} {{ doc_lost.middle_name }}</p>
+            <p>Дата народження: {{ doc_lost.birth_date }}</p>
+            <p>Дата видачі: {{ doc_lost.issue_date }}</p>
+            <p>Департамент видачі: {{ doc_lost.show_dmsudep_issue()['name'] }}</p>
+            <p>Дата визнанно недійсним: {{ doc_lost.date_invalid }}</p>
+            <p>Громадянство: {% for citizenship in doc_lost.show_citizenship() %} {{ citizenship['name'] }}, {% endfor %}</p>
+            {% if doc_lost.date_destruction %}
+                <p>Дата знищення: {{ doc_lost.date_destruction }}</p>
+            {% endif %}
+            {% if doc_lost.act %}<p>Номер акту: {{ doc_lost.act }}</p>{% endif %}
+        </div>
+        <div style="margin-top: 30%">
+            <p>Дата: {{ ref_date }}</p>
+        </div>
+        <div style="page-break-before: always"></div>
+
+        {% for history in history_objects %}
+            <div style="text-align: center; margin-top: 15%;">
+                <p>Історія змін</p>
+            </div>
+
+            <div>
+                <p>Час зміни: {{ history['created_at'] }}</p>
+                <p>Користувач: {{ history['user_edited'].get('last_name', '') }} {{ history['user_edited'].get('first_name', '') }} {{ history['user_edited'].get('middle_name', '')}}</p>
+                <p>Департамент користувача: {{ history['user_edited_dep'].get('name', '') }}</p>
+            </div>
+            <div>
+                <p style="margin-top: 10%;">Було змінено:</p>
+            </div>
+            <div style="margin-left: 5%;">
+                {% if history['first_name'] %}
+                    <p>Iм'я:  Було: {{ get_data_if_empty(history['first_name'], 'old') }} Стало: {{ get_data_if_empty(history['first_name'], 'new') }}</p>
+                {% endif %}
+
+                {% if history['last_name'] %}
+                    <p>Призвище:  Було: {{ get_data_if_empty(history['last_name'], 'old') }} Стало: {{ get_data_if_empty(history['last_name'], 'new') }}</p>
+                {% endif %}
+
+                {% if history['middle_name'] %}
+                    <p>По-батьковi:  Було: {{ get_data_if_empty(history['middle_name'], 'old') }} Стало: {{ get_data_if_empty(history['middle_name'], 'new') }}</p>
+                {% endif %}
+
+                {% if history['date_birth'] %}
+                    <p>Дата народження:  Було: {{ get_data_if_empty(history['date_birth'], 'old') }} Стало: {{ get_data_if_empty(history['date_birth'], 'new') }}</p>
+                {% endif %}
+
+                {% if history['series'] %}
+                    <p>Серiя:  Було: {{ get_data_if_empty(history['series'], 'old') }} Стало: {{ get_data_if_empty(history['series'], 'new') }}</p>
+                {% endif %}
+
+                {% if history['number'] %}
+                    <p>Номер:  Було: {{ get_data_if_empty(history['number'], 'old') }} Стало: {{ get_data_if_empty(history['number'], 'new') }}</p>
+                {% endif %}
+
+                {% if history['issue_date'] %}
+                    <p>Дата створення:  Було: {{ get_data_if_empty(history['issue_date'], 'old') }} Стало: {{ get_data_if_empty(history['issue_date'], 'new') }}</p>
+                {% endif %}
+
+                {% if history['citizenship'] %}
+                    <p>Громадянство:
+                        Було: {{ get_citizenship_if_empty(history['citizenship'], 'old') }}
+                        Стало: {{ get_citizenship_if_empty(history['citizenship'], 'new') }}</p>
+                {% endif %}
+
+                {% if history['date_destruction'] %}
+                    <p>Департамент створення:  Було: {{ get_data_if_empty(history['date_destruction'], 'old') }} Стало: {{ get_data_if_empty(history['date_destruction'], 'new') }}</p>
+                {% endif %}
+
+                {% if history['edit_reason_text'] %}
+                    <p>Причина змiни: {{ history['edit_reason_text'] }}</p>
+                {% endif %}
+
+            </div>
+            <div style="page-break-before: always"></div>
+        {% endfor %}
+    </div>
+</body>
+</html>

@@ -1,0 +1,60 @@
+/*@page {*/
+/*    @bottom-right{*/
+/*        content: "сторiнка " counter(page) " з " counter(pages);*/
+/*    }*/
+/*}*/
+
+@page {
+    size: a4 portrait;
+    margin: 10mm 10mm 10mm 10mm;
+    counter-increment: page;
+    /*@bottom-center {*/
+    /*    content: '(c) XX COMPANY - Page ' counter(page);*/
+    /*    white-space: pre;*/
+    /*    color: grey;*/
+    /*}*/
+    @bottom-right{
+        content: "сторiнка " counter(page) " з " counter(pages);
+    }
+
+}
+html {
+    font-family: Arial;
+    font-size: 14px;
+    font-weight: normal;
+    color: #000000;
+    background-color: transparent;
+    margin: 0;
+    padding: 0;
+    width: auto;
+    height: auto;
+    white-space: normal;
+}
+
+.watermark{
+    position:fixed;
+    z-index:2;
+    display:block;
+    min-height:100%;
+    min-width:100%;
+    left: 0;
+    bottom: 0;
+    background: transparent;
+}
+
+.watermark-text
+{
+    color:lightgrey;
+    font-size:30px;
+    transform:rotate(300deg);
+    -webkit-transform:rotate(300deg);
+    padding-top: 40px;
+    text-align: left;
+    margin-left: -200px;
+}
+.content {
+    position:relative;
+    width: 100%;
+    height: 100%;
+    z-index:1;
+}
